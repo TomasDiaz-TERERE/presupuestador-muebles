@@ -27,7 +27,6 @@ import { useState, useRef, useCallback, useEffect } from "react";
 // ════════════════════════════════════════════════════════════════════════════════
 
 
-// ─── localStorage helpers (reemplaza window.storage del artifact) ──────────────
 function localStorage_get(key) {
   try { const v = localStorage.getItem(key); return v ? { value: v } : null; } catch { return null; }
 }
@@ -351,7 +350,7 @@ export default function App() {
       const base64 = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(",")[1]); r.onerror = rej; r.readAsDataURL(file); });
       setStatus("Identificando muebles con IA…");
       const isPDF = file.type === "application/pdf";
-      const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      const resp = await fetch("/api/analyze", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-sonnet-4-20250514", max_tokens: 4000,
