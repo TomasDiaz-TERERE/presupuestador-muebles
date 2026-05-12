@@ -350,13 +350,9 @@ export default function App() {
       const base64 = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(",")[1]); r.onerror = rej; r.readAsDataURL(file); });
       setStatus("Identificando muebles con IA…");
       const isPDF = file.type === "application/pdf";
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+const resp = await fetch("/api/analyze", {
   method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "x-api-key": import.meta.env.VITE_ANTHROPIC_API_KEY,
-    "anthropic-version": "2023-06-01",
-  },
+  headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-sonnet-4-20250514", max_tokens: 4000,
           system: `Sos un experto en lectura de planos de detallamiento para carpintería en Paraguay.
