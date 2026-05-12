@@ -56,11 +56,11 @@ const sb = {
     return { apikey: key, Authorization: `Bearer ${token}`, "Content-Type": "application/json", Prefer: "return=representation", ...extra };
   },
   async signUp(url, key, email, password) {
-    const r = await fetchWithTimeout(`${url}/auth/v1/signup`, { method: "POST", headers: { apikey: key, "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
+    const r = await fetchWithTimeout(`${url}/auth/v1/signup`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
     return r.json();
   },
   async signIn(url, key, email, password) {
-    const r = await fetchWithTimeout(`${url}/auth/v1/token?grant_type=password`, { method: "POST", headers: { apikey: key, "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
+    const r = await fetchWithTimeout(`${url}/auth/v1/token?grant_type=password`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
     return r.json();
   },
   async signOut(url, key, token) {
@@ -350,9 +350,8 @@ export default function App() {
       const base64 = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(",")[1]); r.onerror = rej; r.readAsDataURL(file); });
       setStatus("Identificando muebles con IA…");
       const isPDF = file.type === "application/pdf";
-const resp = await fetch("/api/analyze", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
+      const resp = await fetch("/api/analyze", {
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-sonnet-4-20250514", max_tokens: 4000,
           system: `Sos un experto en lectura de planos de detallamiento para carpintería en Paraguay.
